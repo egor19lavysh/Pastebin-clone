@@ -1,0 +1,1 @@
+from .accessor import get_mongo_client

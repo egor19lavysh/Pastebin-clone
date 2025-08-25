@@ -1,9 +1,7 @@
 from fastapi import FastAPI
+from src.paste import router as paste_router
 
 
 app = FastAPI()
 
-
-@app.get("/ping")
-def ping_app():
-    return {"msg": "app started!"} 
+app.include_router(paste_router)

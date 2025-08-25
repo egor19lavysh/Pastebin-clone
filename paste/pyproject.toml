@@ -9,6 +9,9 @@ readme = "README.md"
 python = "^3.12"
 fastapi = "^0.116.1"
 uvicorn = "^0.35.0"
+pydantic-settings = "^2.10.1"
+motor = "^3.7.1"
+beanie = "^2.0.0"
 
 
 [build-system]
