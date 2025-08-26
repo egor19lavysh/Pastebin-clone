@@ -1,3 +1,4 @@
+from datetime import timedelta
 from enum import Enum
 
 
@@ -49,3 +50,13 @@ class ExpireAt(str, Enum):
     ONE_DAY = "1d"
     SEVEN_DAYS = "7d"
     NEVER = "never"
+
+    def to_timedelta(self):
+        if self == ExpireAt.TEN_MIN:
+            return timedelta(minutes=10)
+        elif self == ExpireAt.ONE_HOUR:
+            return timedelta(hours=1)
+        elif self == ExpireAt.ONE_DAY:
+            return timedelta(days=1)
+        else:
+            return None  # Для NEVER

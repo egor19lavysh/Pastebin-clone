@@ -23,3 +23,6 @@ class CreatePasteSchema(BaseModel):
 class PasteSchema(CreatePasteSchema):
     hash: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        from_attributes = True

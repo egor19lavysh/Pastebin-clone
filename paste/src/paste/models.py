@@ -10,10 +10,16 @@ class Paste(Document):
     hash: Indexed(str, unique=True) # type: ignore
     title: str
     text: str
-    syntax: SyntaxType
-    created_at: datetime
+    syntax: SyntaxType = SyntaxType.PYTHON
+    created_at: datetime = Field(default_factory=datetime.utcnow)
     expires_at: datetime
-    visibility: PasteVisibility
+    visibility: PasteVisibility = PasteVisibility.PUBLIC
 
     class Config:
         name = "pastes"
+
+    @property
+    def is_expired(self) -> bool:
+        if self.expires_at is None:  # для NEVER
+            return False
+        return datetime.utcnow() > self.expires_at
