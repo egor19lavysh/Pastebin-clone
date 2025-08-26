@@ -3,7 +3,7 @@ from datetime import datetime
 from .enums import *
 
 
-class CreatePasteSchema(BaseModel):
+class PasteCreateSchema(BaseModel):
     title: str
     text: str
     syntax: SyntaxType = SyntaxType.PYTHON
@@ -20,7 +20,7 @@ class CreatePasteSchema(BaseModel):
     
 
 
-class PasteSchema(CreatePasteSchema):
+class PasteSchema(PasteCreateSchema):
     hash: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
