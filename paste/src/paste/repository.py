@@ -13,8 +13,9 @@ class PasteRepository:
         pastes = await Paste.find_all().to_list()
         return list(pastes)
 
-    async def get_paste(self, hash: str):
-        pass
+    async def get_paste(self, hash: str) -> Paste | None:
+        paste = await Paste.find_one(Paste.hash == hash)
+        return paste
 
     async def create_paste(self, paste: PasteCreateSchema) -> str:
         new_hash = self._generate_hash(title=paste.title)
@@ -31,11 +32,39 @@ class PasteRepository:
 
         return new_hash
 
-    async def update_paste(self):
-        pass
+    async def update_paste_title(self, hash: str, new_title: str) -> Paste:
+        paste = await self.get_paste(hash=hash)
+        await paste.set({Paste.title: new_title})
 
-    async def delete_paste(self):
-        pass
+        return paste
+    
+    async def update_paste_text(self, hash: str, new_text: str) -> Paste:
+        paste = await self.get_paste(hash=hash)
+        await paste.set({Paste.text: new_text})
+
+        return paste
+    
+    async def update_paste_syntax(self, hash: str, new_syntax: str) -> Paste:
+        paste = await self.get_paste(hash=hash)
+        await paste.set({Paste.syntax: new_syntax})
+
+        return paste
+    
+    async def update_paste_expiration(self, hash: str, new_expiration: str) -> Paste:
+        paste = await self.get_paste(hash=hash)
+        await paste.set({Paste.expires_at: new_expiration})
+
+        return paste
+    
+    async def update_paste_visibility(self, hash: str, new_visibility: str) -> Paste:
+        paste = await self.get_paste(hash=hash)
+        await paste.set({Paste.visibility: new_visibility})
+
+        return paste
+        
+    async def delete_paste(self, hash: str) -> None:
+        paste = await self.get_paste(hash=hash)
+        await paste.delete()
 
     async def delete_all_pastes(self):
         await Paste.delete_all()

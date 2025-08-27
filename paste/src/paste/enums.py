@@ -6,7 +6,6 @@ class PasteVisibility(str, Enum):
     """Enum для определения уровня видимости пасты."""
 
     PUBLIC = "public"
-    UNLISTED = "unlisted"
     PRIVATE = "private"
 
 
