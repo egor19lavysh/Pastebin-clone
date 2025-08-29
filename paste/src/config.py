@@ -2,11 +2,20 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+
+    # MONGO_DB
     MONGO_USER: str
     MONGO_PASSWORD: str
     MONGO_HOST: str
     MONGO_PORT: str
     MONGO_DB_NAME: str
+
+    #REDIS
+    REDIS_HOST: str
+    REDIS_PORT: str
+    REDIS_DB: int
+
+
 
     @property
     def MONGO_URL(self):
