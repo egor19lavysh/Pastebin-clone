@@ -10,9 +10,14 @@ router = APIRouter(prefix="/paste", tags=["pastes"])
 
 @router.post("/")
 async def create_paste(paste: PasteCreateSchema,
-                       service: Annotated[PasteService, Depends(get_paste_service)]) -> str:
+                       service: Annotated[PasteService, Depends(get_paste_service)],
+                       cache_repository: Annotated[PasteCache, Depends(get_cache_repository)]
+                       ) -> PasteSchema:
     paste_hash = await service.create_paste(paste=paste)
-    return paste_hash
+    paste = await service.get_paste(hash=paste_hash)
+    await cache_repository.set_paste(paste=paste)
+
+    return paste
 
 
 @router.get("/")
@@ -32,6 +37,7 @@ async def get_paste(service: Annotated[PasteService, Depends(get_paste_service)]
                     cache_repository: Annotated[PasteCache, Depends(get_cache_repository)],
                     hash: str) -> PasteSchema | None:
     if paste := await cache_repository.get_paste(hash=hash):
+        print("redis робит 2!")
         return paste
     
     paste = await service.get_paste(hash=hash)
@@ -48,9 +54,9 @@ async def delete_pastes(service: Annotated[PasteService, Depends(get_paste_servi
 async def delete_paste(service: Annotated[PasteService, Depends(get_paste_service)],
                        cache_repository: Annotated[PasteCache, Depends(get_cache_repository)],
                         hash: str) -> None:
-    if await cache_repository.get_paste(hash=hash):
+    if await service.get_paste(hash=hash):
         await cache_repository.delete_paste(hash=hash)
-    await service.delete_paste(hash=hash)
+        await service.delete_paste(hash=hash)
 
 
 @router.patch("/{hash}/title")
